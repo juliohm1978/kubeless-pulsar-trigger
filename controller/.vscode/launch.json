@@ -1,0 +1,20 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run controller.py LAB",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/controller.py",
+      "console": "integratedTerminal",
+      "args": [
+        "-k=~/.kube/config.lab",
+        "--pulsar-broker=pulsar://pulsar.lab.tjpr.jus.br:6650",
+        "--pulsar-token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjZXJ0LXdhdGNoIn0.KOzPDoJNqZlv7KvGYo6siiS7fcKykuHiqvivxuw-NWA"
+      ],
+    }
+  ]
+}
