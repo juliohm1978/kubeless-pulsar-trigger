@@ -10,6 +10,7 @@ argh = "*"
 kubernetes = "*"
 pytz = "*"
 pulsar-client = "*"
+hiyapyco = "*"
 
 [requires]
 python_version = "3.6"

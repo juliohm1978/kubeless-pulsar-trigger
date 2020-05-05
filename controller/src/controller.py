@@ -6,17 +6,20 @@ import pulsar
 import kubernetes
 import logging
 import logging.config
-import os
+import time
+import hiyapyco
 
 PULSAR_BROKER_DEFAULT = "pulsar://pulsar-broker.pulsar:6650"
-PULSAR_TOPIC_DEFAULT  = "persistent://public/cert-watch/cert-updates"
+PULSAR_TOPIC_DEFAULT  = "persistent://public/default/mytopic"
 
 KUBELESS_TRIGGER_NAME     = "pulsartriggers.kubeless.io"
 KUBELESS_TRIGGER_GROUP    = "kubeless.io"
 KUBELESS_TRIGGER_KIND     = "PulsarTrigger"
 KUBELESS_TRIGGER_SINGULAR = "pulsartrigger"
-KUBELESS_TRIGGER_PLURAL   = "pulsartriggerss"
+KUBELESS_TRIGGER_PLURAL   = "pulsartriggers"
 KUBELESS_TRIGGER_VERSION  = "v1"
+
+trigger_list = []
 
 def read_rv(obj):
   """
@@ -46,6 +49,10 @@ def save_rv(obj):
   with open(tmpfile, "w") as f:
     f.write("{revision}".format(revision=obj.metadata.resource_version))
 
+def reconcile_dispatchers():
+  logging.info("Reconciling dispatchers")
+  ## yamlcontent = hiyapyco.load('src/deployment-template.yaml','src/dp2.yaml', method=hiyapyco.METHOD_MERGE, interpolate=True, failonmissingfiles=True)
+
 def main(
   kubeconfig:'Kubernetes config file. Default loads in-cluster config' = None,
   pulsar_broker:'Pulsar broker addr' = PULSAR_BROKER_DEFAULT,
@@ -68,28 +75,23 @@ def main(
 
   v1 = kubernetes.client.CustomObjectsApi()
 
+  list = v1.list_cluster_custom_object(KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL)
+  for item in list['items']:
+    trigger_list.append(item)
+
+  logging.info(trigger_list)
   while True:
-    try:
-      list = v1.list_cluster_custom_object(KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL)
-      logging.info(list)
-      # while True:
-      #   for event in kubernetes.watch.Watch().stream(v1.list_cluster_custom_object, KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL):
-      #     obj = event['object']
-      #     ev_type = event['type']
+    time.sleep(10)
+    # while True:
+    #   for event in kubernetes.watch.Watch().stream(v1.list_cluster_custom_object, KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL):
+    #     obj = event['object']
+    #     ev_type = event['type']
 
-      #     if obj.metadata.labels and CERTMANAGER_LABEL in obj.metadata.labels:
-      #       last_resource_version = read_rv(obj)
-      #       if (last_resource_version) and (int(obj.metadata.resource_version) > last_resource_version) and (ev_type == 'ADDED' or ev_type == 'MODIFIED'):
-      #         logging.info("{last_rv} > {rv}, {namespace}/{name} enviado".format(last_rv=last_resource_version, rv=obj.metadata.resource_version, namespace=obj.metadata.namespace, name=obj.metadata.name))
-      #         pulsar_producer.send(json.dumps(event['raw_object']).encode('utf-8'))
-      #         save_rv(obj)
-
-    except kubernetes.client.rest.ApiException as err:
-      if err.status == 404:
-        logging.error("Missing CRD: {name}".format(name=KUBELESS_TRIGGER_NAME))
-        logging.error("Make sure the controller installation is complete")
-      raise err
-    except Exception as err:
-      raise err
+    #     if obj.metadata.labels and CERTMANAGER_LABEL in obj.metadata.labels:
+    #       last_resource_version = read_rv(obj)
+    #       if (last_resource_version) and (int(obj.metadata.resource_version) > last_resource_version) and (ev_type == 'ADDED' or ev_type == 'MODIFIED'):
+    #         logging.info("{last_rv} > {rv}, {namespace}/{name} enviado".format(last_rv=last_resource_version, rv=obj.metadata.resource_version, namespace=obj.metadata.namespace, name=obj.metadata.name))
+    #         pulsar_producer.send(json.dumps(event['raw_object']).encode('utf-8'))
+    #         save_rv(obj)
 
 argh.dispatch_command(main)
