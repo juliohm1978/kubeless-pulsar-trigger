@@ -1,5 +1,7 @@
 {
   "python.pythonPath": ".venv/bin/python",
+  "python.jediEnabled": false,
+  "python.analysis.memory.keepLibraryAst": true,
   "files.exclude": {
     ".venv": true,
     "**/.git": true,

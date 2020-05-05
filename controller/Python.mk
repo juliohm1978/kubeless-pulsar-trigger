@@ -3,6 +3,7 @@ __init:
 	echo -n $(PYENV_VERSION) > .python-version
 	pyenv install --skip-existing
 	virtualenv -p `pyenv root`/shims/python .venv
+	pipenv install
 
 __reset:
 	rm -fr .venv

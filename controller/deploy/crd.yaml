@@ -1,0 +1,56 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: pulsartriggers.kubeless.io
+spec:
+  group: kubeless.io
+  names:
+    kind: PulsarTrigger
+    plural: pulsartriggers
+    singular: pulsartrigger
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                topic-namespace:
+                  type: string
+                topic-name:
+                  type: string
+                kubeless-handler:
+                  type: string
+                kubeless-function:
+                  type: string
+                deployment:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+              required:
+                - topic-namespace
+                - topic-name
+                - kubeless-handler
+                - kubeless-function
+      additionalPrinterColumns:
+        - name: Topic NS
+          type: string
+          description: Namespace do tópico Pulsar
+          jsonPath: .spec.topic-namespace
+        - name: Topic
+          type: string
+          description: Names do tópico Pulsar
+          jsonPath: .spec.topic-name
+        - name: Function Handler
+          type: string
+          description: Handler da função Kubeless
+          jsonPath: .spec.kubeless-handler
+        - name: Function
+          type: string
+          description: Nome da função Kubeless
+          jsonPath: .spec.kubeless-function

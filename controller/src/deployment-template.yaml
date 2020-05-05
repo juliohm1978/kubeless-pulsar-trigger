@@ -1,0 +1,28 @@
+## Dispatcher Deployment Template
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    created-by: kubeless-pulsar-trigger
+  name: hello
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      created-by: kubeless-pulsar-trigger
+  template:
+    metadata:
+      labels:
+        created-by: kubeless-pulsar-trigger
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: dispatcher
+        resources:
+          limits:
+            cpu: 1
+            memory: 512Mi
+          requests:
+            cpu: 50m
+            memory: 128Mi

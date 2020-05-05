@@ -1,0 +1,19 @@
+---
+apiVersion: kubeless.io/v1
+kind: PulsarTrigger
+metadata:
+  name: tg1
+  namespace: default
+spec:
+  topic-namespace: tpns
+  topic-name: tpname
+  kubeless-handler: hello
+  kubeless-function: world
+  deployment:
+    metadata:
+      labels:
+        l1: v1
+        l2: v2
+      annotations:
+        a1: v1
+        a2: v2

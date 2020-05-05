@@ -9,7 +9,8 @@
       "type": "python",
       "request": "launch",
       "program": "${file}",
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/src"
     },
     {
       "name": "Run controller.py LAB",
@@ -17,6 +18,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/src/controller.py",
       "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/src",
       "args": [
         "-k=~/.kube/config.lab",
         "--pulsar-broker=pulsar://pulsar.lab.tjpr.jus.br:6650",
