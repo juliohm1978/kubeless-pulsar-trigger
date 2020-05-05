@@ -13,7 +13,8 @@
       "args": [
         "-k=~/.kube/config.lab",
         "--pulsar-broker=pulsar://pulsar.lab.tjpr.jus.br:6650",
-        "--pulsar-token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjZXJ0LXdhdGNoIn0.KOzPDoJNqZlv7KvGYo6siiS7fcKykuHiqvivxuw-NWA"
+        "--pulsar-token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjZXJ0LXdhdGNoIn0.KOzPDoJNqZlv7KvGYo6siiS7fcKykuHiqvivxuw-NWA",
+        "--logging-config=${workspaceFolder}/src/logging.ini"
       ],
     }
   ]
