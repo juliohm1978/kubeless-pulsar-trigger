@@ -9,15 +9,8 @@ spec:
   topic-name: tpname
   kubeless-handler: hello
   kubeless-function: world
+  kubeless-function-namespace: kns
   deployment:
-    metadata:
-      labels:
-        l1: v1
-        l2: v2
-      annotations:
-        a1: v1
-        a2: v2
-        a3: v3
     spec:
       template:
         metadata:
