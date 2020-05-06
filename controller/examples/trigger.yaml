@@ -17,3 +17,9 @@ spec:
       annotations:
         a1: v1
         a2: v2
+        a3: v3
+    spec:
+      template:
+        metadata:
+          annotations:
+            a1: v2
