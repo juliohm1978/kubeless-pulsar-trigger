@@ -29,7 +29,7 @@ def deep_merge(a, b, path=None):
             a[key] = b[key]
     return a
 
-def reconcile_dispatchers(crdApi, deployment_template, container_template):
+def reconcile_dispatchers(crdApi, deployment_template, container_template, timezone):
   """
   Reconcile the state of dispatcher pods with the state of trigger objects.
   Dispatcher pods are controlled with a Deployment object.
@@ -89,6 +89,22 @@ def reconcile_dispatchers(crdApi, deployment_template, container_template):
     container['env'] = list()
     
     d = dict()
+    d['name'] = 'TRIGGER_NAME'
+    d['value'] = trigger['metadata']['name']
+    container['env'].append(d)
+    
+    d = dict()
+    d['name'] = 'TRIGGER_NAMESPACE'
+    d['value'] = trigger['metadata']['namespace']
+    container['env'].append(d)
+    
+    ## use the timezone configured for this controller
+    d = dict()
+    d['name'] = 'TZ'
+    d['value'] = timezone
+    container['env'].append(d)
+    
+    d = dict()
     d['name'] = 'PULSAR_TOPIC_NAMESPACE'
     d['value'] = trigger['spec']['pulsar']['namespace']
     container['env'].append(d)
@@ -145,7 +161,8 @@ def reconcile_dispatchers(crdApi, deployment_template, container_template):
 
 def main(
   kubeconfig:'Kubernetes config file. Default loads in-cluster config' = None,
-  logging_config:'Logging configuration .ini format' = 'logging.ini'
+  logging_config:'Logging configuration .ini format' = 'logging.ini',
+  timezone:'Local timezone to use in Python timestamps' = 'UTC'
   ):
   """
   K8S controller for PulsarTrigger objects.
@@ -167,11 +184,11 @@ def main(
   crdApi = kubernetes.client.CustomObjectsApi()
 
   logging.info("Initial reconciliation")
-  reconcile_dispatchers(crdApi, deployment_template, container_template)
+  reconcile_dispatchers(crdApi, deployment_template, container_template, timezone)
   while True:
     try:
       for event in kubernetes.watch.Watch().stream(crdApi.list_cluster_custom_object, KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL):
-        reconcile_dispatchers(crdApi, deployment_template, container_template)
+        reconcile_dispatchers(crdApi, deployment_template, container_template, timezone)
     except Exception as err:
       logging.critical(err, exc_info=True)
     time.sleep(30)
