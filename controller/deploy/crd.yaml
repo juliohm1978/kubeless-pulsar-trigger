@@ -44,7 +44,7 @@ spec:
                     function:
                       type: string
                     port:
-                      type: int
+                      type: integer
                     schema:
                       type: string
                   required:
