@@ -105,7 +105,7 @@ The trigger parameters (pulsar topic, auth token, function name, etc.) are also 
 
 ## Dispatcher Pods
 
-This project also includes Docker images used in the dispatcher pods. They also have one single responsibility: To subscribe to the given Pulsar Topic and send any queued messages to the given Kubeless Function. These parameters come from the `PulsarTrigger` definition that you create and arrive at the dispatcher pods in the form of environment variables.
+This project also includes Docker images used in the dispatcher pods. They also have one single responsibility: subscribe to the given Pulsar Topic and send any queued messages to the given Kubeless Function. These parameters come from the `PulsarTrigger` definition that you create and arrive at the dispatcher pods in the form of environment variables.
 
 ```bash
 PULSAR_TOPIC_NAMESPACE
