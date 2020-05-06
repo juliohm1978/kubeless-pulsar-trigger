@@ -35,6 +35,7 @@ def deep_merge(a, b, path=None):
 def reconcile_dispatchers(crdApi, deployment_template):
   """
   Reconcile the state of dispatcher pods with the state of trigger objects.
+  Dispatcher pods are controlled with a Deployment object.
   """
 
   ## recover a list of defined pulsartriggers
@@ -66,6 +67,37 @@ def reconcile_dispatchers(crdApi, deployment_template):
         name=deployment_merged['metadata']['name']
       )
     )
+
+    ## add parameters for Pulsar Topic and Kubeless Function to the Deployment
+    ## these parameters are passed as environment variables to the dispatcher pod
+    container = deployment_merged['spec']['template']['spec']['containers'][0]
+    container['env'] = list()
+    
+    d = dict()
+    d['name'] = 'TOPIC_NAMESPACE'
+    d['value'] = trigger['spec']['topic-namespace']
+    container['env'].append(d)
+    
+    d = dict()
+    d['name'] = 'TOPIC_NAME'
+    d['value'] = trigger['spec']['topic-name']
+    container['env'].append(d)
+    
+    d = dict()
+    d['name'] = 'KUBELESS_HANDLER'
+    d['value'] = trigger['spec']['kubeless-handler']
+    container['env'].append(d)
+
+    d = dict()
+    d['name'] = 'KUBELESS_FUNCTION'
+    d['value'] = trigger['spec']['kubeless-function']
+    container['env'].append(d)
+
+    d = dict()
+    d['name'] = 'KUBELESS_FUNCTION_NAMESPACE'
+    d['value'] = trigger['spec']['kubeless-function-namespace']
+    container['env'].append(d)
+
     ## create a deployment if there isn't one
     if len(dplist.items) <= 0:
       logging.info("Reconciling deployment {ns}/{name} ADDED".format(ns=deployment_merged['metadata']['namespace'], name=deployment_merged['metadata']['name']))
@@ -104,17 +136,11 @@ def main(
   logging.info("Initial reconciliation")
   reconcile_dispatchers(crdApi, deployment_template)
   while True:
-    for event in kubernetes.watch.Watch().stream(crdApi.list_cluster_custom_object, KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL):
-      obj = event['object']
-      ev_type = event['type']
-
-      # last_resource_version = read_rv(obj)
-      # if (last_resource_version) and (int(obj['metadata']['resourceVersion']) > last_resource_version):
-      #   logging.info("Trigger {et} {ns}/{n}".format(et=ev_type, ns=obj['metadata']['namespace'], n=obj['metadata']['name']))
-      #   reconcile_dispatchers(crdApi, deployment_template)
-      #   save_rv(obj)
-      # logging.info("Trigger {et} {ns}/{n}".format(et=ev_type, ns=obj['metadata']['namespace'], n=obj['metadata']['name']))
-      reconcile_dispatchers(crdApi, deployment_template)
+    try:
+      for event in kubernetes.watch.Watch().stream(crdApi.list_cluster_custom_object, KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL):
+        reconcile_dispatchers(crdApi, deployment_template)
+    except Exception as err:
+      logging.critical(err, exc_info=True)
     time.sleep(10)
 
 argh.dispatch_command(main)
