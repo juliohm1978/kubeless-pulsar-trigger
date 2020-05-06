@@ -1,0 +1,11 @@
+## Dispatcher Container Template
+image: nginx
+imagePullPolicy: IfNotPresent
+name: dispatcher
+resources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi

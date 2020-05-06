@@ -15,6 +15,7 @@ spec:
       labels:
         created-by: kubeless-pulsar-trigger
     spec:
+      replicas: 1
       containers:
       - image: nginx
         imagePullPolicy: Always

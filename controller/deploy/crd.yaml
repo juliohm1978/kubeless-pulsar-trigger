@@ -21,45 +21,60 @@ spec:
             spec:
               type: object
               properties:
-                pulsar-topic-namespace:
-                  type: string
-                pulsar-topic-name:
-                  type: string
-                pulsar-auth-token:
-                  type: string
-                pulsar-broker:
-                  type: string
-                kubeless-function:
-                  type: string
-                kubeless-function-namespace:
-                  type: string
+                pulsar:
+                  type: object
+                  properties:
+                    namespace:
+                      type: string
+                    topic:
+                      type: string
+                    broker:
+                      type: string
+                    auth-token:
+                      type: string
+                  required:
+                    - namespace
+                    - topic
+                    - broker
+                kubeless:
+                  type: object
+                  properties:
+                    namespace:
+                      type: string
+                    function:
+                      type: string
+                    port:
+                      type: int
+                    schema:
+                      type: string
+                  required:
+                    - namespace
+                    - function
+                    - port
                 deployment:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
               required:
-                - pulsar-topic-namespace
-                - pulsar-topic-name
-                - pulsar-broker
-                - kubeless-function
-                - kubeless-function-namespace
+                - pulsar
+                - kubeless
       additionalPrinterColumns:
         - name: Broker
           type: string
           description: Pulsar broker address
-          jsonPath: .spec.pulsar-broker
+          jsonPath: .spec.pulsar.broker
         - name: Topic NS
           type: string
           description: Pulsar topic namespace
-          jsonPath: .spec.pulsar-topic-namespace
+          jsonPath: .spec.pulsar.namespace
         - name: Topic
           type: string
           description: Pulsar topic name
-          jsonPath: .spec.pulsar-topic-name
-        - name: Fn
-          type: string
-          description: Function name
-          jsonPath: .spec.kubeless-function
+          jsonPath: .spec.pulsar.topic
         - name: Fn NS
           type: string
           description: Function namespace
-          jsonPath: .spec.kubeless-function
+          jsonPath: .spec.kubeless.namespace
+        - name: Fn
+          type: string
+          description: Function name
+          jsonPath: .spec.kubeless.function
