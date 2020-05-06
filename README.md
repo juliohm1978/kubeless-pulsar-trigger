@@ -59,8 +59,6 @@ resources:
 
 You can change those by overriding specific values in the `deployment` object in your trigger. In fact, the entire Deployment spec can be included directly in the trigger.
 
-> ***NOTE**: Please, be aware of how the controller merges your Deployment spec with the default template. The controller assumes the first container in the Deployment is the dispatcher. It is currently not possible to include more containers in that pod. The controller merges the default template with the deployment/container specs you defined, replacing the container list for the Deployment.*
-
 ```yaml
 apiVersion: kubeless.io/v1
 kind: PulsarTrigger
@@ -98,6 +96,8 @@ spec:
                   cpu: 1
                   memory: 512Mi
 ```
+
+> ***NOTE**: Please, be aware of how the controller merges your Deployment spec with the default template. The controller assumes the first container in the Deployment is the dispatcher. It is currently not possible to include more containers in that pod. The controller merges the default template with the deployment/container specs you defined, replacing the container list for the Deployment.*
 
 You can view the default values used for the [Deployment](controller/src/deployment-template.yaml) and [Container](controller/src/container-template.yaml) specs in the source code.
 
