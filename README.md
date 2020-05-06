@@ -43,7 +43,7 @@ spec:
     schema: http
 ```
 
-The controller itself is only responsible for watching for PulsarTrigger CRDs objects. It reconciles the status of a PulsarTrigger with a Deployment that spins up independent Dispatcher Pods.
+The controller itself is only responsible for watching PulsarTrigger CRDs objects. It reconciles the status of a PulsarTrigger with a Deployment that spins up independent Dispatcher Pods.
 
 By default, the Deployment uses small values for its container resources:
 
