@@ -29,6 +29,8 @@ spec:
                   type: string
                 kubeless-function:
                   type: string
+                kubeless-function-namespace:
+                  type: string
                 deployment:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
@@ -37,6 +39,7 @@ spec:
                 - topic-name
                 - kubeless-handler
                 - kubeless-function
+                - kubeless-function-namespace
       additionalPrinterColumns:
         - name: Topic NS
           type: string
