@@ -1,0 +1,17 @@
+-i https://pypi.org/simple
+apache-bookkeeper-client==4.10.0
+argh==0.26.2
+certifi==2020.4.5.1
+chardet==3.0.4
+fastavro==0.23.3
+grpcio==1.28.1
+idna==2.9
+prometheus-client==0.7.1
+protobuf==3.11.3
+pulsar-client==2.5.1
+pymmh3==0.0.5
+pytz==2020.1
+ratelimit==2.2.1
+requests==2.23.0
+six==1.14.0
+urllib3==1.25.9

@@ -118,4 +118,4 @@ KUBELESS_FUNCTION_PORT
 KUBELESS_FUNCTION_SCHEMA
 ```
 
-The included containers for dispatcher pods are also implemented in Python with a simple example of a Pulsar client. If you know what you are doing, feel free to replace it to suit your needs. You can override the container image from your `PulsarTrigger` definition (explained above).
+The included containers for dispatcher pods are also implemented in Python with a simple example of a Pulsar client. It includes an increasing backoff delay on repeated errors while calling the Kubeless Function (up to 90s). If you need more advanced message handling and know what you are doing, feel free to replace it to suit your needs. You can override the container image from your `PulsarTrigger` definition (explained above).
