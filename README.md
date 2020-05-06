@@ -97,7 +97,7 @@ spec:
                   memory: 512Mi
 ```
 
-> ***NOTE**: Please, be aware of how the controller merges your Deployment spec with the default template. The controller assumes the first container in the Deployment is the dispatcher. It is currently not possible to include more containers in that pod. The controller merges the default template with the deployment/container specs you defined, replacing the container list for the Deployment.*
+> ***NOTE**: Please, be aware of how the controller merges your Deployment spec with the default template. The controller assumes the first container in the Deployment is the dispatcher. It is currently not possible to include more containers in that pod. The controller merges the default template with the deployment/container specs you defined, replacing the container list for the Deployment. A better merge logic is planned for the future versions.*
 
 You can view the default values used for the [Deployment](controller/src/deployment-template.yaml) and [Container](controller/src/container-template.yaml) specs in the source code.
 
