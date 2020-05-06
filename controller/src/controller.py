@@ -83,7 +83,7 @@ def reconcile_dispatchers(crdApi, deployment_template, container_template, timez
       )
     )
 
-    ## Add parameters for Pulsar Topic and Kubeless Function to the Deployment.
+    ## Add parameters to the Deployment.
     ## These parameters are passed as environment variables to the dispatcher pod.
     container = deployment_merged['spec']['template']['spec']['containers'][0]
     container['env'] = list()
