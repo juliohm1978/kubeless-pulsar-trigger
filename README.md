@@ -9,7 +9,7 @@ The components for this project are implemented in Python 3.6 (the default versi
 There are two components to this solution:
 
 * Kubernetes Controller - watches PulsarTrigger CRD objects from the Kubernetes API and spins up Dispatcher Pods responsible for processing queue events.
-* Dispatcher Pods - subscribe to a sepecific Pulsar topic and send the message contents to a Kubeless Function.
+* Dispatcher Pods - subscribe to a sepecific Pulsar topic and send message contents to a Kubeless Function.
 
 Inspired by discussions at the Kubeless project (<https://github.com/kubeless/kafka-trigger/issues/24> and <https://github.com/kubeless/kubeless/issues/826)>, this implementation uses a different approach from the native [Kafka and NATS triggers](https://kubeless.io/docs/pubsub-functions/#kafka). It decouples the Dispatcher Pod logic from the Kubernetes Controller, allowing the queue message processing to scale indepndently from the controller itself.
 
