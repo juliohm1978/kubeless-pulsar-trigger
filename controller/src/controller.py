@@ -32,33 +32,6 @@ def deep_merge(a, b, path=None):
             a[key] = b[key]
     return a
 
-def read_rv(obj):
-  """
-  Reads the last resource version known from disk. If there isn't one, the
-  current object version is returned.
-  """
-
-  tmpfile = "/tmp/obj.{namespace}.{name}.rv".format(namespace=obj['metadata']['namespace'], name=obj['metadata']['name'])
-  rv = None
-  try:
-    with open(tmpfile) as f:
-      rv = f.read()
-  except FileNotFoundError:
-    pass
-  
-  try:
-    return int(rv)
-  except:
-    return -1
-
-def save_rv(obj):
-  """
-  Saves the resource version to disk.
-  """
-  tmpfile = "/tmp/obj.{namespace}.{name}.rv".format(namespace=obj['metadata']['namespace'], name=obj['metadata']['name'])
-  with open(tmpfile, "w") as f:
-    f.write("{revision}".format(revision=obj['metadata']['resourceVersion']))
-
 def reconcile_dispatchers(crdApi, deployment_template):
   """
   Reconcile the state of dispatcher pods with the state of trigger objects.
