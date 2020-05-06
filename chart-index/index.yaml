@@ -3,12 +3,12 @@ entries:
   kubeless-pulsar-trigger:
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T19:06:37.225245308-03:00"
+    created: "2020-05-06T19:14:32.661365373-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
-    digest: ff09e21cdbcbc08fc3112c3d49b89802e9d61e85b6937554a61d93dd76804b90
+    digest: 2526c3b2ef03b32b5ddd29ac688d1e9c2acf6bb645bd51d987c07fd81c0bce6b
     name: kubeless-pulsar-trigger
     type: application
     urls:
     - kubeless-pulsar-trigger-0.1.0.tgz
     version: 0.1.0
-generated: "2020-05-06T19:06:37.224663023-03:00"
+generated: "2020-05-06T19:14:32.660806595-03:00"
