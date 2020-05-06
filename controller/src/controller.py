@@ -38,33 +38,36 @@ def read_rv(obj):
   current object version is returned.
   """
 
-  tmpfile = "/tmp/obj.{namespace}.{name}.rv".format(namespace=obj.metadata.namespace, name=obj.metadata.name)
+  tmpfile = "/tmp/obj.{namespace}.{name}.rv".format(namespace=obj['metadata']['namespace'], name=obj['metadata']['name'])
   rv = None
   try:
     with open(tmpfile) as f:
       rv = f.read()
   except FileNotFoundError:
-    save_rv(obj)
     pass
   
   try:
     return int(rv)
   except:
-    obj.metadata.resource_version
+    return -1
 
 def save_rv(obj):
   """
   Saves the resource version to disk.
   """
-  tmpfile = "/tmp/obj.{namespace}.{name}.rv".format(namespace=obj.metadata.namespace, name=obj.metadata.name)
+  tmpfile = "/tmp/obj.{namespace}.{name}.rv".format(namespace=obj['metadata']['namespace'], name=obj['metadata']['name'])
   with open(tmpfile, "w") as f:
-    f.write("{revision}".format(revision=obj.metadata.resource_version))
+    f.write("{revision}".format(revision=obj['metadata']['resourceVersion']))
 
-def reconcile_dispatchers(trigger_list, deployment_template):
+def reconcile_dispatchers(crdApi, deployment_template):
   """
   Reconcile the state of dispatcher pods with the state of trigger objects.
   """
-  logging.info("Reconciling dispatchers")
+
+  ## recover a list of defined pulsartriggers
+  trigger_list = crdApi.list_cluster_custom_object(KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL)['items']
+
+  ## recover a list of deployments created by this controller
   v1api = kubernetes.client.AppsV1Api()
   running_depls = v1api.list_deployment_for_all_namespaces(label_selector='created-by=kubeless-pulsar-trigger')
 
@@ -75,7 +78,7 @@ def reconcile_dispatchers(trigger_list, deployment_template):
       if depl.metadata.name == trigger['metadata']['name']:
         found = True
     if not found:
-      logging.info("Reconciling deployment {ns}/{name} DELETE".format(ns=depl.metadata.namespace, name=depl.metadata.name))
+      logging.info("Reconciling deployment {ns}/{name} DELETED".format(ns=depl.metadata.namespace, name=depl.metadata.name))
       v1api.delete_namespaced_deployment(depl.metadata.name, depl.metadata.namespace)
 
   ## loop throug all triggers and find the corresponding deployment
@@ -92,9 +95,12 @@ def reconcile_dispatchers(trigger_list, deployment_template):
     )
     ## create a deployment if there isn't one
     if len(dplist.items) <= 0:
-      logging.info("Reconciling deployment {ns}/{name} CREATE".format(ns=deployment_merged['metadata']['namespace'], name=deployment_merged['metadata']['name']))
+      logging.info("Reconciling deployment {ns}/{name} ADDED".format(ns=deployment_merged['metadata']['namespace'], name=deployment_merged['metadata']['name']))
       v1api.create_namespaced_deployment(deployment_merged['metadata']['namespace'], deployment_merged)
-    
+    else:
+      logging.info("Reconciling deployment {ns}/{name} MODIFED".format(ns=deployment_merged['metadata']['namespace'], name=deployment_merged['metadata']['name']))
+      v1api.replace_namespaced_deployment(name=deployment_merged['metadata']['name'], namespace=deployment_merged['metadata']['namespace'], body=deployment_merged)
+
   logging.info('Reconciliation done')
 
 def main(
@@ -122,27 +128,20 @@ def main(
 
   crdApi = kubernetes.client.CustomObjectsApi()
 
-  ## global list of triggers
-  trigger_list = []
-
-  logging.info("Initial trigger load")
-  list = crdApi.list_cluster_custom_object(KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL)
-  for item in list['items']:
-    trigger_list.append(item)
-  reconcile_dispatchers(trigger_list, deployment_template)
-
+  logging.info("Initial reconciliation")
+  reconcile_dispatchers(crdApi, deployment_template)
   while True:
-    time.sleep(10)
-    # while True:
-    #   for event in kubernetes.watch.Watch().stream(v1.list_cluster_custom_object, KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL):
-    #     obj = event['object']
-    #     ev_type = event['type']
+    for event in kubernetes.watch.Watch().stream(crdApi.list_cluster_custom_object, KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL):
+      obj = event['object']
+      ev_type = event['type']
 
-    #     if obj.metadata.labels and CERTMANAGER_LABEL in obj.metadata.labels:
-    #       last_resource_version = read_rv(obj)
-    #       if (last_resource_version) and (int(obj.metadata.resource_version) > last_resource_version) and (ev_type == 'ADDED' or ev_type == 'MODIFIED'):
-    #         logging.info("{last_rv} > {rv}, {namespace}/{name} enviado".format(last_rv=last_resource_version, rv=obj.metadata.resource_version, namespace=obj.metadata.namespace, name=obj.metadata.name))
-    #         pulsar_producer.send(json.dumps(event['raw_object']).encode('utf-8'))
-    #         save_rv(obj)
+      # last_resource_version = read_rv(obj)
+      # if (last_resource_version) and (int(obj['metadata']['resourceVersion']) > last_resource_version):
+      #   logging.info("Trigger {et} {ns}/{n}".format(et=ev_type, ns=obj['metadata']['namespace'], n=obj['metadata']['name']))
+      #   reconcile_dispatchers(crdApi, deployment_template)
+      #   save_rv(obj)
+      # logging.info("Trigger {et} {ns}/{n}".format(et=ev_type, ns=obj['metadata']['namespace'], n=obj['metadata']['name']))
+      reconcile_dispatchers(crdApi, deployment_template)
+    time.sleep(10)
 
 argh.dispatch_command(main)
