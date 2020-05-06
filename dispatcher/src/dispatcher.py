@@ -27,9 +27,13 @@ def main(
   passed by the Kubernetes Controller.
   """
 
+  timezone           = os.environ.get("TZ")
+  if not timezone:
+    timezone = "UTC"
+
   event_name         = os.environ.get("TRIGGER_NAME")
   event_namespace    = os.environ.get("TRIGGER_NAMESPACE")
-  event_time         = datetime.datetime.now(pytz.timezone("America/Sao_Paulo"))
+  event_time         = datetime.datetime.now(pytz.timezone(timezone))
   pulsar_broker      = os.environ.get("PULSAR_BROKER")
   pulsar_namespace   = os.environ.get("PULSAR_TOPIC_NAMESPACE")
   pulsar_topic       = os.environ.get("PULSAR_TOPIC_NAME")
