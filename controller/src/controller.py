@@ -9,9 +9,6 @@ import logging.config
 import time
 import hiyapyco
 
-PULSAR_BROKER_DEFAULT = "pulsar://pulsar-broker.pulsar:6650"
-PULSAR_TOPIC_DEFAULT  = "persistent://public/default/mytopic"
-
 KUBELESS_TRIGGER_NAME     = "pulsartriggers.kubeless.io"
 KUBELESS_TRIGGER_GROUP    = "kubeless.io"
 KUBELESS_TRIGGER_KIND     = "PulsarTrigger"
@@ -74,20 +71,25 @@ def reconcile_dispatchers(crdApi, deployment_template):
     container['env'] = list()
     
     d = dict()
-    d['name'] = 'TOPIC_NAMESPACE'
-    d['value'] = trigger['spec']['topic-namespace']
+    d['name'] = 'PULSAR_TOPIC_NAMESPACE'
+    d['value'] = trigger['spec']['pulsar-topic-namespace']
     container['env'].append(d)
     
     d = dict()
-    d['name'] = 'TOPIC_NAME'
-    d['value'] = trigger['spec']['topic-name']
+    d['name'] = 'PULSAR_TOPIC_NAME'
+    d['value'] = trigger['spec']['pulsar-topic-name']
     container['env'].append(d)
     
     d = dict()
-    d['name'] = 'KUBELESS_HANDLER'
-    d['value'] = trigger['spec']['kubeless-handler']
+    d['name'] = 'PULSAR_BROKER'
+    d['value'] = trigger['spec']['pulsar-broker']
     container['env'].append(d)
-
+    
+    d = dict()
+    d['name'] = 'PULSAR_AUTH_TOKEN'
+    d['value'] = trigger['spec']['pulsar-auth-token']
+    container['env'].append(d)
+    
     d = dict()
     d['name'] = 'KUBELESS_FUNCTION'
     d['value'] = trigger['spec']['kubeless-function']
@@ -110,13 +112,10 @@ def reconcile_dispatchers(crdApi, deployment_template):
 
 def main(
   kubeconfig:'Kubernetes config file. Default loads in-cluster config' = None,
-  pulsar_broker:'Pulsar broker addr' = PULSAR_BROKER_DEFAULT,
-  pulsar_token:'Pulsar authentication token' = None,
-  pulsar_topic:'Pulsar topic to subscribe to' = PULSAR_TOPIC_DEFAULT,
   logging_config:'Logging configuration .ini format' = 'logging.ini'
   ):
   """
-  Controller main function
+  K8S controller for PulsarTrigger objects.
   """
 
   logging.config.fileConfig(fname=logging_config)
@@ -141,6 +140,6 @@ def main(
         reconcile_dispatchers(crdApi, deployment_template)
     except Exception as err:
       logging.critical(err, exc_info=True)
-    time.sleep(10)
+    time.sleep(30)
 
 argh.dispatch_command(main)

@@ -21,11 +21,13 @@ spec:
             spec:
               type: object
               properties:
-                topic-namespace:
+                pulsar-topic-namespace:
                   type: string
-                topic-name:
+                pulsar-topic-name:
                   type: string
-                kubeless-handler:
+                pulsar-auth-token:
+                  type: string
+                pulsar-broker:
                   type: string
                 kubeless-function:
                   type: string
@@ -35,25 +37,29 @@ spec:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
               required:
-                - topic-namespace
-                - topic-name
-                - kubeless-handler
+                - pulsar-topic-namespace
+                - pulsar-topic-name
+                - pulsar-broker
                 - kubeless-function
                 - kubeless-function-namespace
       additionalPrinterColumns:
+        - name: Broker
+          type: string
+          description: Pulsar broker address
+          jsonPath: .spec.pulsar-broker
         - name: Topic NS
           type: string
-          description: Namespace do tópico Pulsar
-          jsonPath: .spec.topic-namespace
+          description: Pulsar topic namespace
+          jsonPath: .spec.pulsar-topic-namespace
         - name: Topic
           type: string
-          description: Names do tópico Pulsar
-          jsonPath: .spec.topic-name
-        - name: Function Handler
+          description: Pulsar topic name
+          jsonPath: .spec.pulsar-topic-name
+        - name: Fn
           type: string
-          description: Handler da função Kubeless
-          jsonPath: .spec.kubeless-handler
-        - name: Function
+          description: Function name
+          jsonPath: .spec.kubeless-function
+        - name: Fn NS
           type: string
-          description: Nome da função Kubeless
+          description: Function namespace
           jsonPath: .spec.kubeless-function

@@ -5,11 +5,13 @@ metadata:
   name: tg1
   namespace: default
 spec:
-  topic-namespace: tpns
-  topic-name: tpname
-  kubeless-handler: hello
-  kubeless-function: world
-  kubeless-function-namespace: kns
+  ## Topic: persistent://public/default/mytopic
+  pulsar-topic-namespace: default
+  pulsar-topic-name: mytopic
+  pulsar-broker: pulsar://pulsar.lab.tjpr.jus.br:6650
+  pulsar-auth-token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjZXJ0LXdhdGNoIn0.KOzPDoJNqZlv7KvGYo6siiS7fcKykuHiqvivxuw-NWA
+  kubeless-function: hello
+  kubeless-function-namespace: default
   deployment:
     spec:
       template:
