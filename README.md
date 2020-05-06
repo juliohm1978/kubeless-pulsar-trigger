@@ -1,5 +1,7 @@
 # Kubeless Pulsar Trigger
 
+> *NOTE: This project is still under development. No release has yet been made.*
+
 This project implements a Pulsar Trigger for the [Kubeless serverless platform](https://kubeless.io/). In the spirit of how Kubeless works, it defines a new Custom Resource Definition for Kubernetes to represent a `PulsarTrigger`. The trigger controller creates dispatcher pods to handle queue messages, sending the contents to a Kubeless Function of your choice.
 
 The components for this project are implemented in Python 3.6 (the default version for Ubuntu 18.04 LTS at the time). It uses the [Python Kubernetes Client library](https://github.com/kubernetes-client/python), along with a few others to get the job done.
