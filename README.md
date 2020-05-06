@@ -1,6 +1,6 @@
 # Kubeless Pulsar Trigger
 
-This project implements a Pulsar Trigger for the [Kubeless serverless platform](https://kubeless.io/). In the spirit of how Kubeless works, it defines a new Custom Resource Definition for Kubernetes to represent the a `PulsarTrigger` that reacts to Pulsar topic events, sending the contents to a Kubeless Function of your choice.
+This project implements a Pulsar Trigger for the [Kubeless serverless platform](https://kubeless.io/). In the spirit of how Kubeless works, it defines a new Custom Resource Definition for Kubernetes to represent a `PulsarTrigger` which reacts to Pulsar topic events. The trigger controller creates dispatcher pods that handle Pulsar queue messages, sending the contents to a Kubeless Function of your choice.
 
 The components for this project are implemented in Python 3.6 (the default version for Ubuntu 18.04 LTS at the time). It uses the [Python Kubernetes Client library](https://github.com/kubernetes-client/python), along with a few others to get the job done.
 
@@ -8,10 +8,14 @@ The components for this project are implemented in Python 3.6 (the default versi
 
 There are two components to this solution:
 
-* Kubernetes Controller - watches PulsarTrigger CRD objects from the Kubernetes API and spins up Dispatcher Pods responsible for processing queue events.
+* Kubernetes Controller - watches PulsarTrigger objects from the Kubernetes API and spins up Dispatcher Pods for processing queue events.
 * Dispatcher Pods - subscribe to a sepecific Pulsar topic and send message contents to a Kubeless Function.
 
-Inspired by discussions at the Kubeless project ([here](https://github.com/kubeless/kafka-trigger/issues/24) and [here](https://github.com/kubeless/kubeless/issues/826)), this implementation uses a different approach from the native [Kafka and NATS triggers](https://kubeless.io/docs/pubsub-functions/#kafka). It decouples the Dispatcher Pod logic from the Kubernetes Controller, allowing the queue message processing to scale indepndently from the controller itself.
+Inspired by discussions at the Kubeless project ([here](https://github.com/kubeless/kafka-trigger/issues/24) and [here](https://github.com/kubeless/kubeless/issues/826)), this implementation uses a different approach from the native [Kafka and NATS triggers](https://kubeless.io/docs/pubsub-functions/#kafka). Here, the Dispatcher Pod logic is decoupled from the Kubernetes Controller, allowing the queue message processing to scale indepndently from the controller itself.
+
+## Installation
+
+TODO: helm chart and instructions
 
 ## Creating a `PulsarTrigger`
 
@@ -53,7 +57,7 @@ resources:
     memory: 512Mi
 ```
 
-You change those by overriding them in the `deployment` object for your trigger. In fact, the entire Deployment created by the controller can be customized directly in the trigger.
+You change those by overriding them in the `deployment` object in your trigger. In fact, the entire Deployment created by the controller can be customized directly in the trigger.
 
 ```yaml
 apiVersion: kubeless.io/v1
