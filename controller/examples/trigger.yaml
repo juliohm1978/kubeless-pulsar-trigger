@@ -16,8 +16,14 @@ spec:
     function: hello
     port: 8080
   deployment:
+    metadata:
+      labels:
+        l1: v2
     spec:
       template:
-        metadata:
-          annotations:
-            a1: v2
+        spec:
+          containers:
+            - resources:
+                limits:
+                  cpu: 2
+                  memory: 2Gi

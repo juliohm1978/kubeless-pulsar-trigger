@@ -8,6 +8,7 @@ import logging
 import logging.config
 import time
 import hiyapyco
+import copy
 
 KUBELESS_TRIGGER_NAME     = "pulsartriggers.kubeless.io"
 KUBELESS_TRIGGER_GROUP    = "kubeless.io"
@@ -54,19 +55,19 @@ def reconcile_dispatchers(crdApi, deployment_template, container_template):
 
   ## loop throug all triggers, create/update deployments
   for trigger in trigger_list:
-    deployment_merged = deployment_template
-    container_merged  = container_template
+    deployment_merged = copy.deepcopy(deployment_template)
+    container_merged  = copy.deepcopy(container_template)
     
     ## merge deployment and container specs to the values coming from the trigger
     if 'deployment' in trigger['spec'] and trigger['spec']['deployment']:
-      deployment_merged = deep_merge(deployment_template, trigger['spec']['deployment'])
+      deployment_merged = deep_merge(deployment_merged, trigger['spec']['deployment'])
 
       ## merge container spec
       if 'spec' in trigger['spec']['deployment']:
         if 'template' in trigger['spec']['deployment']['spec']:
           if 'spec' in trigger['spec']['deployment']['spec']['template']:
             if 'containers' in trigger['spec']['deployment']['spec']['template']['spec'] and len(trigger['spec']['deployment']['spec']['template']['spec']['containers']) > 0:
-              container_merged = deep_merge(container_template, trigger['spec']['deployment']['spec']['template']['spec']['containers'][0])
+              container_merged = deep_merge(container_merged, trigger['spec']['deployment']['spec']['template']['spec']['containers'][0])
       
       ## add merged container spec to the deployment
       deployment_merged['spec']['template']['spec']['containers'] = list()
