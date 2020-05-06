@@ -1,5 +1,5 @@
 ## Dispatcher Container Template
-image: nginx
+image: juliohm/kubeless-pulsar-trigger-dispatcher:beta
 imagePullPolicy: IfNotPresent
 name: dispatcher
 resources:

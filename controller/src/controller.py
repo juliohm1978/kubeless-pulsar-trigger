@@ -2,7 +2,6 @@
 
 import argh
 import json
-import pulsar
 import kubernetes
 import logging
 import logging.config

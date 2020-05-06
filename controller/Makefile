@@ -1,5 +1,5 @@
 PYENV_VERSION=3.6.10
-TAG=cert-watch:1.0
+TAG=juliohm/kubeless-pulsar-trigger-controller:beta
 
 .PHONY: $(MAKECMDGOALS)
 
@@ -8,10 +8,9 @@ vscode:
 
 docker:
 	pipenv lock -r > src/requirements.txt
-	cd ../ && ./build --cache cert-watch --tag $(TAG)
+	docker build -t $(TAG) .
 
-push:
-	cd ../ && ./build --cache cert-watch --tag $(TAG) --push
-
+push: docker
+	docker push $(TAG)
 
 include Python.mk
