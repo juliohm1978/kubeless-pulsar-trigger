@@ -6,12 +6,15 @@ metadata:
   namespace: default
 spec:
   ## Topic: persistent://public/default/mytopic
-  pulsar-topic-namespace: default
-  pulsar-topic-name: mytopic
-  pulsar-broker: pulsar://pulsar.lab.tjpr.jus.br:6650
-  pulsar-auth-token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjZXJ0LXdhdGNoIn0.KOzPDoJNqZlv7KvGYo6siiS7fcKykuHiqvivxuw-NWA
-  kubeless-function: hello
-  kubeless-function-namespace: default
+  pulsar:
+    namespace: default
+    topic: mytopic
+    broker: pulsar://pulsar.lab.tjpr.jus.br:6650
+    auth-token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjZXJ0LXdhdGNoIn0.KOzPDoJNqZlv7KvGYo6siiS7fcKykuHiqvivxuw-NWA
+  kubeless:
+    namespace: default
+    function: hello
+    port: 8080
   deployment:
     spec:
       template:
