@@ -29,7 +29,7 @@ def deep_merge(a, b, path=None):
             a[key] = b[key]
     return a
 
-def reconcile_dispatchers(crdApi, deployment_template):
+def reconcile_dispatchers(crdApi, deployment_template, container_template):
   """
   Reconcile the state of dispatcher pods with the state of trigger objects.
   Dispatcher pods are controlled with a Deployment object.
@@ -52,12 +52,30 @@ def reconcile_dispatchers(crdApi, deployment_template):
       logging.info("Reconciling deployment {ns}/{name} DELETED".format(ns=depl.metadata.namespace, name=depl.metadata.name))
       v1api.delete_namespaced_deployment(depl.metadata.name, depl.metadata.namespace)
 
-  ## loop throug all triggers and find the corresponding deployment
+  ## loop throug all triggers, create/update deployments
   for trigger in trigger_list:
     deployment_merged = deployment_template
+    container_merged  = container_template
+    
+    ## merge deployment and container specs to the values coming from the trigger
     if 'deployment' in trigger['spec'] and trigger['spec']['deployment']:
       deployment_merged = deep_merge(deployment_template, trigger['spec']['deployment'])
+
+      ## merge container spec
+      if 'spec' in trigger['spec']['deployment']:
+        if 'template' in trigger['spec']['deployment']['spec']:
+          if 'spec' in trigger['spec']['deployment']['spec']['template']:
+            if 'containers' in trigger['spec']['deployment']['spec']['template']['spec'] and len(trigger['spec']['deployment']['spec']['template']['spec']['containers']) > 0:
+              container_merged = deep_merge(container_template, trigger['spec']['deployment']['spec']['template']['spec']['containers'][0])
+      
+      ## add merged container spec to the deployment
+      deployment_merged['spec']['template']['spec']['containers'] = list()
+      deployment_merged['spec']['template']['spec']['containers'].append(container_merged)
+    
+    ## give the deployment the same name as the trigger
     deployment_merged['metadata']['name'] = trigger['metadata']['name']
+    
+    ## check if the deployment already exists
     dplist = v1api.list_deployment_for_all_namespaces(
       field_selector="metadata.namespace={ns},metadata.name={name}".format(
         ns=deployment_merged['metadata']['namespace'],
@@ -65,8 +83,8 @@ def reconcile_dispatchers(crdApi, deployment_template):
       )
     )
 
-    ## add parameters for Pulsar Topic and Kubeless Function to the Deployment
-    ## these parameters are passed as environment variables to the dispatcher pod
+    ## Add parameters for Pulsar Topic and Kubeless Function to the Deployment.
+    ## These parameters are passed as environment variables to the dispatcher pod.
     container = deployment_merged['spec']['template']['spec']['containers'][0]
     container['env'] = list()
     
@@ -139,6 +157,7 @@ def main(
 
   logging.info("Loading deployment template")
   deployment_template = hiyapyco.load('deployment-template.yaml')
+  container_template = hiyapyco.load('container-template.yaml')
 
   if kubeconfig:
     kubernetes.config.load_kube_config(config_file=kubeconfig)
@@ -148,11 +167,11 @@ def main(
   crdApi = kubernetes.client.CustomObjectsApi()
 
   logging.info("Initial reconciliation")
-  reconcile_dispatchers(crdApi, deployment_template)
+  reconcile_dispatchers(crdApi, deployment_template, container_template)
   while True:
     try:
       for event in kubernetes.watch.Watch().stream(crdApi.list_cluster_custom_object, KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL):
-        reconcile_dispatchers(crdApi, deployment_template)
+        reconcile_dispatchers(crdApi, deployment_template, container_template)
     except Exception as err:
       logging.critical(err, exc_info=True)
     time.sleep(30)

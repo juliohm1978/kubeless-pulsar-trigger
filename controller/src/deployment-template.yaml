@@ -16,14 +16,5 @@ spec:
         created-by: kubeless-pulsar-trigger
     spec:
       replicas: 1
-      containers:
-      - image: nginx
-        imagePullPolicy: Always
-        name: dispatcher
-        resources:
-          limits:
-            cpu: 1
-            memory: 512Mi
-          requests:
-            cpu: 50m
-            memory: 128Mi
+      ## container template is a separate yaml
+      containers: []
