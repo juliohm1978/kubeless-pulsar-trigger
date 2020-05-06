@@ -2,10 +2,23 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+## Some high level config for the dispatcher pod.
+dispatcher:
+  deployment:
+    ## Changing this here will have a global effect for the controller.
+    ## If you need to change the image used for a single trigger instance,
+    ## you can override this value in the trigger spec.
+    image: juliohm/kubeless-pulsar-trigger-dispatcher
+    
+    ## It not set, the value of {{.Chart.AppVersion}} is used
+    tag:
+
 replicaCount: 1
 
 image:
-  repository: juliohm/kubeless-pulsar-trigger-dispatcher:beta
+  repository: juliohm/kubeless-pulsar-trigger-controller
+  
+  ## TODO: Replace with IfNotPresent for 1.0
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -30,34 +43,13 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-service:
-  type: ClusterIP
-  port: 80
-
-ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths: []
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  limits:
+    cpu: 1
+    memory: 512Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi
 
 nodeSelector: {}
 

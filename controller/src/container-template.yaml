@@ -1,5 +1,5 @@
 ## Dispatcher Container Template
-image: juliohm/kubeless-pulsar-trigger-dispatcher:beta
+image: REPLACED_AT_RUNTIME
 imagePullPolicy: IfNotPresent
 name: dispatcher
 resources:

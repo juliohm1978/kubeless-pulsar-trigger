@@ -29,7 +29,7 @@ def deep_merge(a, b, path=None):
             a[key] = b[key]
     return a
 
-def reconcile_dispatchers(crdApi, deployment_template, container_template, timezone):
+def reconcile_dispatchers(crdApi, deployment_template, container_template, timezone, dispatcher_image):
   """
   Reconcile the state of dispatcher pods with the state of trigger objects.
   Dispatcher pods are controlled with a Deployment object.
@@ -56,6 +56,7 @@ def reconcile_dispatchers(crdApi, deployment_template, container_template, timez
   for trigger in trigger_list:
     deployment_merged = copy.deepcopy(deployment_template)
     container_merged  = copy.deepcopy(container_template)
+    container_merged['image'] = dispatcher_image
     
     ## merge deployment and container specs to the values coming from the trigger
     if 'deployment' in trigger['spec'] and trigger['spec']['deployment']:
@@ -162,7 +163,8 @@ def reconcile_dispatchers(crdApi, deployment_template, container_template, timez
 def main(
   kubeconfig:'Kubernetes config file. Default loads in-cluster config' = None,
   logging_config:'Logging configuration .ini format' = 'logging.ini',
-  timezone:'Local timezone to use in Python timestamps' = 'UTC'
+  timezone:'Local timezone to use in Python timestamps' = 'UTC',
+  dispatcher_image:'' = "juliohm/kubeless-pulsar-trigger-dispatcher:beta"
   ):
   """
   K8S controller for PulsarTrigger objects.
@@ -184,11 +186,11 @@ def main(
   crdApi = kubernetes.client.CustomObjectsApi()
 
   logging.info("Initial reconciliation")
-  reconcile_dispatchers(crdApi, deployment_template, container_template, timezone)
+  reconcile_dispatchers(crdApi, deployment_template, container_template, timezone, dispatcher_image)
   while True:
     try:
       for event in kubernetes.watch.Watch().stream(crdApi.list_cluster_custom_object, KUBELESS_TRIGGER_GROUP, KUBELESS_TRIGGER_VERSION, KUBELESS_TRIGGER_PLURAL):
-        reconcile_dispatchers(crdApi, deployment_template, container_template, timezone)
+        reconcile_dispatchers(crdApi, deployment_template, container_template, timezone, dispatcher_image)
     except Exception as err:
       logging.critical(err, exc_info=True)
     time.sleep(30)
