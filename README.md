@@ -1,4 +1,4 @@
-# Kubernetes Pulsar Trigger
+# Kubeless Pulsar Trigger
 
 This project implements a Pulsar Trigger for the [Kubeless serverless platform](https://kubeless.io/). In the spirit of how Kubeless works, it defines a new Custom Resource Definition for Kubernetes to represent the a `PulsarTrigger` that reacts to Pulsar topic events, sending the contents to a Kubeless Function of your choice.
 
