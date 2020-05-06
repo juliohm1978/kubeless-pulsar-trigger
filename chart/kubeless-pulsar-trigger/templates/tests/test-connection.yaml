@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "kubeless-pulsar-trigger.fullname" . }}-test-connection"
+  labels:
+{{ include "kubeless-pulsar-trigger.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "kubeless-pulsar-trigger.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
