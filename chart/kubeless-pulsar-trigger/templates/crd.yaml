@@ -28,6 +28,8 @@ spec:
                   properties:
                     topic-type:
                       type: string
+                    tenant:
+                      type: string
                     namespace:
                       type: string
                     topic:
