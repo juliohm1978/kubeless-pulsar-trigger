@@ -3,9 +3,9 @@ entries:
   kubeless-pulsar-trigger:
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:18:24.024439088-03:00"
+    created: "2020-05-06T23:24:30.080419654-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
-    digest: 357a8932549663f1ea478936cf846fa3b86960fef159924c7b7ea3bd08c612d4
+    digest: ec08eb9a0fd757ca3f7b0f707fbd21a7da12669c44b114657ba67ff47512327b
     name: kubeless-pulsar-trigger
     type: application
     urls:
@@ -13,7 +13,7 @@ entries:
     version: 0.6.0
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:18:24.024112173-03:00"
+    created: "2020-05-06T23:24:30.080040437-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
     digest: 5a621edf9c53beddd63a3dbb2487453cd6aefe5a6059bebf851e4427a1df0978
     name: kubeless-pulsar-trigger
@@ -23,7 +23,7 @@ entries:
     version: 0.5.0
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:18:24.023798693-03:00"
+    created: "2020-05-06T23:24:30.079614176-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
     digest: 0423e81f27ac20898a26d77c21d1f67b8c5d28528cf311e6b020a38f9f28aaaa
     name: kubeless-pulsar-trigger
@@ -33,7 +33,7 @@ entries:
     version: 0.4.0
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:18:24.023438536-03:00"
+    created: "2020-05-06T23:24:30.079205077-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
     digest: 3525f0963cb3a6c632378e8ce9e03ef1231edbe2c13a6bfc3ca3dfb42c733a4a
     name: kubeless-pulsar-trigger
@@ -43,7 +43,7 @@ entries:
     version: 0.3.0
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:18:24.023083706-03:00"
+    created: "2020-05-06T23:24:30.078787515-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
     digest: 27a0c336c40a0952bf2d503b5e728b57a93956715a43d9f2b1dfa98ca93c1a23
     name: kubeless-pulsar-trigger
@@ -53,7 +53,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:18:24.022714058-03:00"
+    created: "2020-05-06T23:24:30.078343663-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
     digest: 4adc219ced67cb8b1198a5ea2153c9e9cd0e2d4d6db5d258b57ca246d3fc891b
     name: kubeless-pulsar-trigger
@@ -64,7 +64,17 @@ entries:
   kubeless-pulsar-trigger-crd:
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:18:24.024655579-03:00"
+    created: "2020-05-06T23:24:30.080778605-03:00"
+    description: CRDs necessary for the Kubeless Pulsar Trigger
+    digest: 3022111eaa4993310d3f5c354ceea7a44045ffc2453e175687503e1be4920a74
+    name: kubeless-pulsar-trigger-crd
+    type: application
+    urls:
+    - kubeless-pulsar-trigger-crd-0.7.0.tgz
+    version: 0.7.0
+  - apiVersion: v2
+    appVersion: beta
+    created: "2020-05-06T23:24:30.080597324-03:00"
     description: CRDs necessary for the Kubeless Pulsar Trigger
     digest: a77d74d7b506aabc2163fe6358d8e818e5219ef41a2051282bf5d18f125e1785
     name: kubeless-pulsar-trigger-crd
@@ -72,4 +82,4 @@ entries:
     urls:
     - kubeless-pulsar-trigger-crd-0.6.0.tgz
     version: 0.6.0
-generated: "2020-05-06T23:18:24.022153174-03:00"
+generated: "2020-05-06T23:24:30.077760269-03:00"
