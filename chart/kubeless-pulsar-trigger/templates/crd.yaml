@@ -26,6 +26,8 @@ spec:
                 pulsar:
                   type: object
                   properties:
+                    topic-type:
+                      type: string
                     namespace:
                       type: string
                     topic:
