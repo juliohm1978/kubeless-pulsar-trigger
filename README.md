@@ -15,7 +15,7 @@ Inspired by discussions at the Kubeless project ([here](https://github.com/kubel
 
 ## Installation
 
-A Helm Chart is available in this repository. For a quick installation namespace, use the `Makefile` targetes from the `/deploy` directory.
+A Helm Chart is available in this repository. For a quick installation, use the `Makefile` targetes from the `/deploy` directory.
 
 ```bash
 cd deploy
