@@ -126,7 +126,7 @@ spec:
 
 > ***NOTE**: Please, be aware of how the controller merges your Deployment spec with an internal default template. While most Deployment values can be safely overriden, the controller assumes the first container in the list as the dispatcher. It is currently not possible to include more than one container in that pod. The internal logic merges and replaces the container list using the specs from your trigger. A more flexible implementation is planned for future versions.*
 
-You can view the default values used for the [Deployment](controller/src/deployment-template.yaml) and [Container](controller/src/container-template.yaml) specs in the source code.
+You can view the default values used for the [Deployment](https://github.com/juliohm1978/kubeless-pulsar-trigger/blob/master/controller/src/deployment-template.yaml) and [Container](https://github.com/juliohm1978/kubeless-pulsar-trigger/blob/master/controller/src/container-template.yaml) specs in the source code.
 
 The trigger parameters (pulsar topic, auth token, function name, etc.) are also added to the Deployment at runtime.
 
