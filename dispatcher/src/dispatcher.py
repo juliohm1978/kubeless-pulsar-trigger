@@ -88,7 +88,6 @@ def main(
       try:
         json.loads(msg_data_str)
         logging.info("Content is json")
-        content_type = 'application/json'
       except:
         content_type = 'application/x-www-form-urlencoded'
 
