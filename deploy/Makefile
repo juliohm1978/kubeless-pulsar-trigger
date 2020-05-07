@@ -10,5 +10,3 @@ install:
 
 delete:
 	helm del kpt
-
-include Python.mk
