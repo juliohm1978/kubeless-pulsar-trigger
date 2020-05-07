@@ -29,18 +29,6 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
             - --dispatcher-image={{ include "dispatcher-image-name" . }}
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
