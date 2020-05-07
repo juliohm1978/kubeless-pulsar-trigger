@@ -8,7 +8,7 @@ The components for this project are implemented in Python 3.6 (the default versi
 
 There are two components to this solution:
 
-* Kubernetes Controller - watches PulsarTrigger objects from the Kubernetes API and spins up Dispatcher Pods for processing queue events.
+* Kubernetes Controller - watches `PulsarTriggers` from the Kubernetes API and spins up Dispatcher Pods for processing queue events.
 * Dispatcher Pods - subscribe to a sepecific Pulsar topic and send message contents to a Kubeless Function.
 
 Inspired by discussions at the Kubeless project ([here](https://github.com/kubeless/kafka-trigger/issues/24) and [here](https://github.com/kubeless/kubeless/issues/826)), this implementation uses a different approach from the native [Kafka and NATS triggers](https://kubeless.io/docs/pubsub-functions/#kafka). Here, the the queue message processing is decoupled from the controller itself, allowing that part of the solution to scale and evolve independently.
@@ -130,17 +130,13 @@ The trigger parameters (pulsar topic, auth token, function name, etc.) are also 
 
 ## Dispatcher Pods
 
-This project also includes Docker images used in the dispatcher pods. They also have one single responsibility: subscribe to the given Pulsar Topic and send any queued messages to the given Kubeless Function. These parameters come from the `PulsarTrigger` definition that you create and arrive at the dispatcher pods in the form of environment variables.
+This project also includes Docker images used in the dispatcher pods. They have one single responsibility: subscribe to the given Pulsar Topic and send any queued messages to the specified Kubeless Function. These parameters come from the `PulsarTrigger` that you create and arrive at the dispatcher pods in the form of environment variables.
 
 ```bash
-PULSAR_TOPIC_NAMESPACE
-PULSAR_TOPIC_NAME
+PULSAR_TOPIC
 PULSAR_BROKER
 PULSAR_AUTH_TOKEN
 KUBELESS_FUNCTION
-KUBELESS_FUNCTION_NAMESPACE
-KUBELESS_FUNCTION_PORT
-KUBELESS_FUNCTION_SCHEMA
 
 ## additional values passed
 TRIGGER_NAME
@@ -148,4 +144,10 @@ TRIGGER_NAMESPACE
 TIMEZONE
 ```
 
-The included containers for dispatcher pods are also implemented in Python with a simple example of a Pulsar client. It includes an increasing backoff delay on repeated errors while calling the Kubeless Function (up to 90s). If you need more advanced message handling and know what you are doing, feel free to replace it to suit your needs. You can override the container image from your `PulsarTrigger` definition (explained above).
+The included containers for dispatcher pods are also implemented in Python with a simple example of a Pulsar client. It includes an increasing backoff delay on repeated errors while calling the Kubeless Function (up to 90s). If you need more advanced message handling and know what you are doing, feel free to replace it to suit your needs. You can override Deployment and Pod specs from your `PulsarTrigger` (see above).
+
+## Bug Report
+
+Feel free to submit any issues to the GitHub repository:
+
+<https://github.com/juliohm1978/kubeless-pulsar-trigger>
