@@ -3,7 +3,17 @@ entries:
   kubeless-pulsar-trigger:
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:31:59.064978298-03:00"
+    created: "2020-05-06T23:45:12.545322042-03:00"
+    description: A Kubeless Trigger for Pulsar Message Events
+    digest: 00f3e6bdcec5ec68313f8198197b6388a22e58d30d8f0be25c272c5c804bcd1a
+    name: kubeless-pulsar-trigger
+    type: application
+    urls:
+    - kubeless-pulsar-trigger-0.8.0.tgz
+    version: 0.8.0
+  - apiVersion: v2
+    appVersion: beta
+    created: "2020-05-06T23:45:12.545012867-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
     digest: 0bd28c0316b4ae933e6831ff07b0bde083a089f3a847d2abc6deece62bf1fde4
     name: kubeless-pulsar-trigger
@@ -13,7 +23,7 @@ entries:
     version: 0.7.0
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:31:59.064685171-03:00"
+    created: "2020-05-06T23:45:12.544727663-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
     digest: ec08eb9a0fd757ca3f7b0f707fbd21a7da12669c44b114657ba67ff47512327b
     name: kubeless-pulsar-trigger
@@ -23,7 +33,7 @@ entries:
     version: 0.6.0
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:31:59.064374013-03:00"
+    created: "2020-05-06T23:45:12.544419473-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
     digest: 5a621edf9c53beddd63a3dbb2487453cd6aefe5a6059bebf851e4427a1df0978
     name: kubeless-pulsar-trigger
@@ -33,7 +43,7 @@ entries:
     version: 0.5.0
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:31:59.063886326-03:00"
+    created: "2020-05-06T23:45:12.544098322-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
     digest: 0423e81f27ac20898a26d77c21d1f67b8c5d28528cf311e6b020a38f9f28aaaa
     name: kubeless-pulsar-trigger
@@ -43,7 +53,7 @@ entries:
     version: 0.4.0
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:31:59.063441948-03:00"
+    created: "2020-05-06T23:45:12.543764035-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
     digest: 3525f0963cb3a6c632378e8ce9e03ef1231edbe2c13a6bfc3ca3dfb42c733a4a
     name: kubeless-pulsar-trigger
@@ -53,7 +63,7 @@ entries:
     version: 0.3.0
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:31:59.06308173-03:00"
+    created: "2020-05-06T23:45:12.543439338-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
     digest: 27a0c336c40a0952bf2d503b5e728b57a93956715a43d9f2b1dfa98ca93c1a23
     name: kubeless-pulsar-trigger
@@ -63,7 +73,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: beta
-    created: "2020-05-06T23:31:59.062735983-03:00"
+    created: "2020-05-06T23:45:12.543101449-03:00"
     description: A Kubeless Trigger for Pulsar Message Events
     digest: 4adc219ced67cb8b1198a5ea2153c9e9cd0e2d4d6db5d258b57ca246d3fc891b
     name: kubeless-pulsar-trigger
@@ -71,35 +81,4 @@ entries:
     urls:
     - kubeless-pulsar-trigger-0.1.0.tgz
     version: 0.1.0
-  kubeless-pulsar-trigger-crd:
-  - apiVersion: v2
-    appVersion: beta
-    created: "2020-05-06T23:31:59.065442354-03:00"
-    description: CRDs necessary for the Kubeless Pulsar Trigger
-    digest: 5519b144cb9e28351dcb003b210f179ab6235b8ab70745910f83d626a9fb8a08
-    name: kubeless-pulsar-trigger-crd
-    type: application
-    urls:
-    - kubeless-pulsar-trigger-crd-0.8.0.tgz
-    version: 0.8.0
-  - apiVersion: v2
-    appVersion: beta
-    created: "2020-05-06T23:31:59.065277181-03:00"
-    description: CRDs necessary for the Kubeless Pulsar Trigger
-    digest: da8157dc7eb5e63628756b1985fffd42f9d217610ae0bc7c848f771fab59d603
-    name: kubeless-pulsar-trigger-crd
-    type: application
-    urls:
-    - kubeless-pulsar-trigger-crd-0.7.0.tgz
-    version: 0.7.0
-  - apiVersion: v2
-    appVersion: beta
-    created: "2020-05-06T23:31:59.065137885-03:00"
-    description: CRDs necessary for the Kubeless Pulsar Trigger
-    digest: a77d74d7b506aabc2163fe6358d8e818e5219ef41a2051282bf5d18f125e1785
-    name: kubeless-pulsar-trigger-crd
-    type: application
-    urls:
-    - kubeless-pulsar-trigger-crd-0.6.0.tgz
-    version: 0.6.0
-generated: "2020-05-06T23:31:59.062280158-03:00"
+generated: "2020-05-06T23:45:12.542534222-03:00"
