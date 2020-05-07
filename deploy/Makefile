@@ -8,3 +8,6 @@ install:
 
 delete:
 	helm del kpt
+
+deletecrd:
+	kubectl delete -f crd.yaml
