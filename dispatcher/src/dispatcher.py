@@ -86,7 +86,7 @@ def main(
   )
 
   logging.info("Welcome to Kubeless Pulsar Event Dispatcher")
-  logging.info("Kubeless endpoint {s}://{f}.{n}:{p}".foramt(
+  logging.info("Kubeless endpoint {s}://{f}.{n}:{p}".format(
     s=kubeless_schema,
     f=kubeless_function,
     n=kubeless_namespace,
