@@ -12,10 +12,6 @@ import requests
 import json
 import time
 
-ERROR_BACKOFF_DELAY_INITIAL  = 1
-ERROR_BACKOFF_DELAY_MAX      = 90
-ERROR_BACKOFF_FACTOR         = 5
-
 def main(
   kubeconfig:'Kubernetes config file. Default loads in-cluster config' = None,
   logging_config:'Logging configuration .ini format' = 'logging.ini'
@@ -26,6 +22,10 @@ def main(
   Most of the configuration for this component comes from environment variables,
   passed by the Kubernetes Controller.
   """
+
+  ERROR_BACKOFF_DELAY_INITIAL  = 1
+  ERROR_BACKOFF_DELAY_MAX      = 90
+  ERROR_BACKOFF_FACTOR         = 5
 
   timezone           = os.environ.get("TZ")
   if not timezone:
@@ -114,7 +114,7 @@ def main(
   while True:
     msg = consumer.receive()
     try:
-      logging.debug("Message: {m}".format(msg))
+      logging.debug("Message: {m}".format(m=msg))
       
       try:
         http_payload = json.loads(msg.data)
