@@ -26,12 +26,6 @@ spec:
                 pulsar:
                   type: object
                   properties:
-                    topic-type:
-                      type: string
-                    tenant:
-                      type: string
-                    namespace:
-                      type: string
                     topic:
                       type: string
                     broker:
@@ -39,24 +33,15 @@ spec:
                     auth-token:
                       type: string
                   required:
-                    - namespace
                     - topic
                     - broker
                 kubeless:
                   type: object
                   properties:
-                    namespace:
-                      type: string
                     function:
                       type: string
-                    port:
-                      type: integer
-                    schema:
-                      type: string
                   required:
-                    - namespace
                     - function
-                    - port
                 deployment:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
@@ -68,10 +53,6 @@ spec:
           type: string
           description: Pulsar broker address
           jsonPath: .spec.pulsar.broker
-        - name: Topic NS
-          type: string
-          description: Pulsar topic namespace
-          jsonPath: .spec.pulsar.namespace
         - name: Topic
           type: string
           description: Pulsar topic name

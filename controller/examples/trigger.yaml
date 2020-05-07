@@ -5,16 +5,12 @@ metadata:
   name: tg1
   namespace: default
 spec:
-  ## Topic: persistent://public/default/mytopic
   pulsar:
-    namespace: default
-    topic: mytopic
+    topic: persistent://public/cert-watch/cert-updates
     broker: pulsar://pulsar.lab.tjpr.jus.br:6650
     auth-token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjZXJ0LXdhdGNoIn0.KOzPDoJNqZlv7KvGYo6siiS7fcKykuHiqvivxuw-NWA
   kubeless:
-    namespace: default
-    function: hello
-    port: 8080
+    function: http://hello.default:8080
   deployment:
     metadata:
       labels:

@@ -105,19 +105,8 @@ def reconcile_dispatchers(crdApi, deployment_template, container_template, timez
     d['value'] = timezone
     container['env'].append(d)
     
-    if 'topic-type' in trigger['spec']['pulsar']:
-      d = dict()
-      d['name'] = 'PULSAR_TOPIC_TYPE'
-      d['value'] = trigger['spec']['pulsar']['topic-type']
-      container['env'].append(d)
-    
     d = dict()
-    d['name'] = 'PULSAR_TOPIC_NAMESPACE'
-    d['value'] = trigger['spec']['pulsar']['namespace']
-    container['env'].append(d)
-    
-    d = dict()
-    d['name'] = 'PULSAR_TOPIC_NAME'
+    d['name'] = 'PULSAR_TOPIC'
     d['value'] = trigger['spec']['pulsar']['topic']
     container['env'].append(d)
     
@@ -133,26 +122,8 @@ def reconcile_dispatchers(crdApi, deployment_template, container_template, timez
       container['env'].append(d)
     
     d = dict()
-    d['name'] = 'KUBELESS_FUNCTION_NAMESPACE'
-    d['value'] = trigger['spec']['kubeless']['namespace']
-    container['env'].append(d)
-
-    d = dict()
     d['name'] = 'KUBELESS_FUNCTION'
     d['value'] = trigger['spec']['kubeless']['function']
-    container['env'].append(d)
-
-    d = dict()
-    d['name'] = 'KUBELESS_FUNCTION_PORT'
-    d['value'] = str(trigger['spec']['kubeless']['port'])
-    container['env'].append(d)
-
-    d = dict()
-    d['name'] = 'KUBELESS_FUNCTION_SCHEME'
-    if 'scheme' in trigger['spec']['kubeless']:
-      d['value'] = trigger['spec']['kubeless']['scheme']
-    else:
-      d['value'] = "http"
     container['env'].append(d)
 
     ## create a deployment if there isn't one
