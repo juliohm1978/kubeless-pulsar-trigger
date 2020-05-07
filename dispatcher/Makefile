@@ -1,17 +1,13 @@
-PYENV_VERSION=3.6.10
-TAG=juliohm/kubeless-pulsar-trigger-dispatcher:beta
-
-.PHONY: $(MAKECMDGOALS)
-
-vscode:
-	pipenv run code .
+include ../common.mk
 
 docker:
 	pipenv lock -r > src/requirements.txt
-	docker build -t $(TAG) .
+	docker build -t $(DISPATCHER_TAG) .
 
 push: docker
-	docker push $(TAG)
+	docker push $(DISPATCHER_TAG)
 
+vscode:
+	pipenv run code .
 
 include Python.mk
