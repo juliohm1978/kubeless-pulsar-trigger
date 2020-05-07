@@ -105,6 +105,12 @@ def reconcile_dispatchers(crdApi, deployment_template, container_template, timez
     d['value'] = timezone
     container['env'].append(d)
     
+    if 'topic-type' in trigger['spec']['pulsar']:
+      d = dict()
+      d['name'] = 'PULSAR_TOPIC_TYPE'
+      d['value'] = trigger['spec']['pulsar']['topic-type']
+      container['env'].append(d)
+    
     d = dict()
     d['name'] = 'PULSAR_TOPIC_NAMESPACE'
     d['value'] = trigger['spec']['pulsar']['namespace']

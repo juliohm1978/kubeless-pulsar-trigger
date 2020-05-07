@@ -101,8 +101,16 @@ def main(
   else:
     pulsar_client = pulsar.Client(pulsar_broker)
 
-  consumer = pulsar_client.subscribe(pulsar_topic_str)
+  consumer = pulsar_client.subscribe(pulsar_topic_str, subscription_name="{n}-{ns}".format(n=event_name,ns=event_namespace))
   error_backoff_delay = ERROR_BACKOFF_DELAY_INITIAL
+
+  function_url = "{s}://{fn}.{ns}:{port}".format(
+    s=kubeless_schema,
+    fn=kubeless_function,
+    ns=kubeless_namespace,
+    port=kubeless_port
+  )
+
   while True:
     msg = consumer.receive()
     try:
@@ -123,7 +131,7 @@ def main(
         'event-name': event_name
       }
 
-      r = requests.post(url, data=http_payload, headers=http_headers, allow_redirects=True)
+      r = requests.post(function_url, data=http_payload, headers=http_headers, allow_redirects=True)
       if r.status_code < 200 or r.status_code > 299:
         raise Exception("HTTP Status Code {sc}, response: {body}".format(sc=r.status_code, body=r.text))
 
