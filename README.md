@@ -53,6 +53,8 @@ make deletecrd
 ```
 
 > ***❗️❗️❗️ WARNING** 👉 Removing the CRD definitions will also permanently delete ALL `PulsarTriggers` you may have already created.*
+>
+> For a complete unistall, make sure you remove your `PulsarTriggers` first. That will give the controller a chance to clean up and remove the associated Deployments.
 
 ## Creating a `PulsarTrigger`
 
