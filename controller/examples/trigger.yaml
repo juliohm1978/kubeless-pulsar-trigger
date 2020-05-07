@@ -6,9 +6,9 @@ metadata:
   namespace: default
 spec:
   pulsar:
-    topic: persistent://public/cert-watch/cert-updates
-    broker: pulsar://pulsar.lab.tjpr.jus.br:6650
-    auth-token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjZXJ0LXdhdGNoIn0.KOzPDoJNqZlv7KvGYo6siiS7fcKykuHiqvivxuw-NWA
+    topic: persistent://public/default/mytopic
+    broker: pulsar://pulsar.addr:6650
+    auth-token: nnn
   kubeless:
     function: http://hello.default:8080
   deployment:
