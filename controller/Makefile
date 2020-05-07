@@ -13,4 +13,10 @@ docker:
 push: docker
 	docker push $(TAG)
 
+install:
+	helm upgrade --install kpt kubeless-pulsar-trigger/kubeless-pulsar-trigger
+
+delete:
+	helm del kpt
+
 include Python.mk
