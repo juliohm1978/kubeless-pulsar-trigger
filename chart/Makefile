@@ -3,3 +3,4 @@ index: package
 
 package:
 	cd ../chart-index && helm package ../chart/kubeless-pulsar-trigger
+	cd ../chart-index && helm package ../chart/kubeless-pulsar-trigger-crd
