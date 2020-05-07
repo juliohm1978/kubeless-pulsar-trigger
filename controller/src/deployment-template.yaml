@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     created-by: kubeless-pulsar-trigger
-  name: hello
+  name: REPLACED_AT_RUNTIME
   namespace: default
 spec:
   selector:

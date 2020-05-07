@@ -18,8 +18,7 @@ replicaCount: 1
 image:
   repository: juliohm/kubeless-pulsar-trigger-controller
   
-  ## TODO: Replace with IfNotPresent for 1.0
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 imagePullSecrets: []
 nameOverride: ""

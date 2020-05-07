@@ -1,7 +1,5 @@
 # Kubeless Pulsar Trigger
 
-> *NOTE: This project is still under development. No release has yet been made.*
-
 This project implements a Pulsar Trigger for the [Kubeless serverless platform](https://kubeless.io/). In the spirit of how Kubeless works, it defines a new Custom Resource Definition for Kubernetes to represent a `PulsarTrigger`. The trigger controller creates dispatcher pods to handle queue messages, sending the contents to a Kubeless Function of your choice.
 
 The components for this project are implemented in Python 3.6 (the default version for Ubuntu 18.04 LTS at the time). It uses the [Python Kubernetes Client library](https://github.com/kubernetes-client/python), along with a few others to get the job done.
@@ -17,11 +15,48 @@ Inspired by discussions at the Kubeless project ([here](https://github.com/kubel
 
 ## Installation
 
-TODO: helm chart and instructions
+A Helm Chart is available in this repository. For a quick installation namespace, use the `Makefile` targetes from the `/deploy` directory.
+
+```bash
+cd deploy
+
+## Add this repository to your helm config
+make repo
+
+## Quick installation to `default` namespace.
+## Use the most recent chart version.
+make install
+```
+
+For further customization, you can issue `helm` commands manually.
+
+```bash
+## Add repo
+helm repo add kubeless-pulsar-trigger https://juliohm1978.github.io/kubeless-pulsar-trigger/chart-index
+helm repo up
+
+## Don't forget the CRD first
+kubectl apply -f crd.yaml
+
+## Install
+helm upgrade --install kpt kubeless-pulsar-trigger/kubeless-pulsar-trigger
+```
+
+To uninstall, follow the `Makefile` targets:
+
+```bash
+## Uninstall the controller
+make delete
+
+## Uninstall the CRD
+make deletecrd
+```
+
+> ***❗️❗️❗️ WARNING** 👉 Removing the CRD definitions will also permanently delete ALL `PulsarTriggers` you may have already created.*
 
 ## Creating a `PulsarTrigger`
 
-Once the controller is running, and you have a Kubeless Function ready, creating a trigger is just a matter if creating an object that uses the `PulsarTrigger` CRD.
+Once the controller is running, [and you have a Kubeless Function ready](https://kubeless.io/docs/quick-start/), creating a trigger is just a matter if creating a `PulsarTrigger` object.
 
 ```yaml
 apiVersion: kubeless.io/v1
@@ -30,24 +65,18 @@ metadata:
   name: mytrigger
   namespace: default
 spec:
-  ## Pulsar Topic persistent://public/default/mytopic
   pulsar:
-    namespace: default
-    topic: mytopic
+    topic: persistent://public/default/mytopic
     broker: pulsar://pulsar.addr:6650
     auth-token: nnn
 
-  ## Function http://myfunction.default:8080
   kubeless:
-    namespace: default
-    function: myfunction
-    port: 8080
-    schema: http
+    function: http://myfunction.default:8080
 ```
 
-The controller itself is only responsible for reconciling the status of `PulsarTrigger` objects, creating/updating Deployments to handle the actual message processing.
+The controller itself is only responsible for reconciling the status of `PulsarTriggers`, creating/updating Deployments to handle the actual message processing. That job is handled by dispatcher pods, and a default implementation is also included. Once your `PulsarTrigger` is created, you should see a Deployment and its Pod also created shortly after.
 
-By default, the dispacther pod container uses small values for its resources:
+By default, the dispacther pod uses relatively small resource values:
 
 ```yaml
 resources:
@@ -59,7 +88,7 @@ resources:
     memory: 512Mi
 ```
 
-You can change those by overriding specific values in the `deployment` object in your trigger. In fact, the entire Deployment spec can be included directly in the trigger.
+You can change those by overriding specific values in the `deployment` object in your trigger. In fact, the entire Deployment spec can be included.
 
 ```yaml
 apiVersion: kubeless.io/v1
@@ -68,19 +97,13 @@ metadata:
   name: mytrigger
   namespace: default
 spec:
-  ## Pulsar Topic persistent://public/default/mytopic
   pulsar:
-    namespace: default
-    topic: mytopic
+    topic: persistent://public/default/mytopic
     broker: pulsar://pulsar.addr:6650
     auth-token: nnn
 
-  ## Function http://myfunction.default:8080
   kubeless:
-    namespace: default
-    function: myfunction
-    port: 8080
-    schema: http
+    function: http://myfunction.default:8080
 
   ## Override any deployment spec from the default template
   deployment:
@@ -99,7 +122,7 @@ spec:
                   memory: 512Mi
 ```
 
-> ***NOTE**: Please, be aware of how the controller merges your Deployment spec with the default template. The controller assumes the first container in the Deployment is the dispatcher. It is currently not possible to include more containers in that pod. The controller merges the default template with the deployment/container specs you defined, replacing the container list for the Deployment. A better merge logic is planned for the future versions.*
+> ***NOTE**: Please, be aware of how the controller merges your Deployment spec with an internal default template. While most Deployment values can be safely overriden, the controller assumes the first container in the list as the dispatcher. It is currently not possible to include more than one container in that pod. The internal logic merges and replaces the container list using the specs from your trigger. A more flexible implementation is planned for future versions.*
 
 You can view the default values used for the [Deployment](controller/src/deployment-template.yaml) and [Container](controller/src/container-template.yaml) specs in the source code.
 

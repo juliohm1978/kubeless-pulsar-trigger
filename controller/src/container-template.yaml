@@ -1,7 +1,6 @@
 ## Dispatcher Container Template
 image: REPLACED_AT_RUNTIME
-## TODO: Change to IfNotPresent for 1.0
-imagePullPolicy: Always
+imagePullPolicy: IfNotPresent
 name: dispatcher
 resources:
   limits:
