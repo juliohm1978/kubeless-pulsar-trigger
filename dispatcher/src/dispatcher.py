@@ -103,6 +103,9 @@ def main(
       if r.status_code < 200 or r.status_code > 299:
         raise Exception("HTTP Status Code {sc}, response: {body}".format(sc=r.status_code, body=r.text))
 
+      ## acknowledge, message successfully processed
+      consumer.acknowledge(msg)
+
       ## upon success, reset error backoff delay
       error_backoff_delay = ERROR_BACKOFF_DELAY_INITIAL
     except Exception as err:
